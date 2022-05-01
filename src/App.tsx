@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Flex, Box, Text, Heading } from "@chakra-ui/react";
 
 import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import {
   GoogleAuthProvider,
   getAuth,
@@ -23,6 +24,7 @@ const {
   REACT_APP_STORAGE_BUCKET,
   REACT_APP_MESSAGING_SENDER_ID,
   REACT_APP_APP_ID,
+  RECAPTCHA_SECRET_KEY,
 } = process.env;
 
 const app = initializeApp({
@@ -32,6 +34,11 @@ const app = initializeApp({
   storageBucket: REACT_APP_STORAGE_BUCKET,
   messagingSenderId: REACT_APP_MESSAGING_SENDER_ID,
   appId: REACT_APP_APP_ID,
+});
+
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider(`${RECAPTCHA_SECRET_KEY}`),
+  isTokenAutoRefreshEnabled: true
 });
 
 const auth = getAuth(app);
