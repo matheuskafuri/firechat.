@@ -36,11 +36,6 @@ const app = initializeApp({
   appId: REACT_APP_APP_ID,
 });
 
-const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider(`${RECAPTCHA_SECRET_KEY}`),
-  isTokenAutoRefreshEnabled: true
-});
-
 const auth = getAuth(app);
 const db = getFirestore(app);
 
