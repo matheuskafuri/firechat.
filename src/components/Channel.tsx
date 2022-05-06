@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Button, Input, Flex, List, ListItem, Box } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import {
@@ -39,6 +39,16 @@ async function getMessages(db: any) {
 export const Channel = ({ user, db }: ChannelProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const listRef = useRef<HTMLUListElement>({} as HTMLUListElement);
+
+  function scrollToMessage() {
+    const lastMessage = listRef.current.lastElementChild;
+    lastMessage?.scrollIntoView({
+      block: "end",
+      inline: "nearest", 
+      behavior: "smooth" 
+    });
+  }
 
   const { uid, displayName, photoURL } = user;
 
@@ -64,6 +74,7 @@ export const Channel = ({ user, db }: ChannelProps) => {
         console.log(error);
       }
 
+      scrollToMessage();
       setNewMessage("");
     }
   };
@@ -71,7 +82,7 @@ export const Channel = ({ user, db }: ChannelProps) => {
   return (
     <>
       <Box overflow="auto" height={480}>
-        <List spacing={6}>
+        <List spacing={6} ref={listRef}>
           {messages.map((message) => {
             return (
               <ListItem key={message.id}>
